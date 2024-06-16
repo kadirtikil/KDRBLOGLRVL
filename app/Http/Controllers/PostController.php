@@ -49,11 +49,41 @@ class PostController extends Controller
 
     // Delete post
     public function deletePost($id) {
-        return response()->json(['message' => $id]);
+        // sanitize the id from the url first
+        $id = filter_var($id, FILTER_SANITIZE_STRING);
+
+
+        // ok first check if the post exists;
+        $dripCheck = DB::select('select * from posts where id = ?', [$id]);
+
+        if($dripCheck){
+            // delete the row
+            DB::table('posts')->where('id', '=', $id)->delete();
+        } else {
+            // if it doesnt exist it cannot be deleted. 
+            return response()->json(["message" => "no bonita"], 400);
+        }
+
+        return response()->json(['message' => "all good under the hood"]);
     }
 
     // Edit post
     public function editPost(Request $request, $id) {
+        $id = filter_var($id, FILTER_SANITIZE_STRING);
+        $title = $request->input('title');
+        $description = $request->input('description');
+        $tags = $request->input('tags');
+        $author = $request->input('author');
+        $data = [$title, $description, $tags, $author];
+
+        // here we got to check if the current user matches the one in the request 
+        // and then find the row with the id and check if the author matches there as well
+        // then let the editing take place.
+
+        // will have to figure out how to handle the authentication before doing that. 
+        // should i do it myself or use sanctum.....
+
+
         return response()->json(['message' => $request, 'another message' => $id]);
     }
 
