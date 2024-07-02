@@ -27,9 +27,9 @@ class PostController extends Controller
         $temp = PostController::checkRequestInputForCreatePost($data);
 
         // execute the query if it doesnt already exist right.....
-        // so check if this entry already kind of exists. 
+        // so check if this entry already kind of exists.
         $dripCheck = DB::select('select * from posts where title = ?', [$title]);
-        
+
         // thene execute the insert query.
         if($dripCheck){
             return response()->json(["messagee" => "no bonita"]);
@@ -60,7 +60,7 @@ class PostController extends Controller
             // delete the row
             DB::table('posts')->where('id', '=', $id)->delete();
         } else {
-            // if it doesnt exist it cannot be deleted. 
+            // if it doesnt exist it cannot be deleted.
             return response()->json(["message" => "no bonita"], 400);
         }
 
@@ -76,11 +76,11 @@ class PostController extends Controller
         $author = $request->input('author');
         $data = [$title, $description, $tags, $author];
 
-        // here we got to check if the current user matches the one in the request 
+        // here we got to check if the current user matches the one in the request
         // and then find the row with the id and check if the author matches there as well
         // then let the editing take place.
 
-        // will have to figure out how to handle the authentication before doing that. 
+        // will have to figure out how to handle the authentication before doing that.
         // should i do it myself or use sanctum.....
 
 
@@ -111,7 +111,7 @@ class PostController extends Controller
             return [];
            }
         }
-    
+
         return $returnVal;
     }
 }
